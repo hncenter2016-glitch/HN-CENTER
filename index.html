@@ -450,10 +450,46 @@ function addTeacherQuestion(){
 function showModel(){ document.getElementById('modelContainer').innerText=JSON.stringify(models[currentModel]||[]);}
 function prevModel(){ if(currentModel>0){currentModel--; showModel();} }
 function nextModel(){ if(currentModel<models.length-1){currentModel++; showModel();} }
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDgsivtm87sf0E2OhVazHi-DVZUbkMlxmo",
+  authDomain: "hn-center-c7dac.firebaseapp.com",
+  projectId: "hn-center-c7dac",
+  storageBucket: "hn-center-c7dac.firebasestorage.app",
+  messagingSenderId: "368045678275",
+  appId: "1:368045678275:web:770d53ec2200a014cb8c76",
+  measurementId: "G-MZJX960SXY"
+};
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // مثال: حفظ نتيجة الطالب
+  async function saveResult(userId, score) {
+    await setDoc(doc(db, "results", userId), { score });
+    alert("✅ تم حفظ النتيجة بنجاح على الخادم!");
+  }
+
+  // مثال: جلب النتيجة لاحقًا
+  async function getResult(userId) {
+    const docSnap = await getDoc(doc(db, "results", userId));
+    if (docSnap.exists()) {
+      console.log("النتيجة:", docSnap.data());
+    } else {
+      console.log("ما في بيانات لهالطالب.");
+    }
+  }
+
+  // استدعي هالوظيفة وقت الحفظ
+  // saveResult(currentUser.uid, 50);
+</script>
 
 </script>
 </body>
 </html>
+
 
 
 
