@@ -484,11 +484,63 @@ const firebaseConfig = {
 
   // استدعي هالوظيفة وقت الحفظ
   // saveResult(currentUser.uid, 50);
+<script type="module">
+  // استيراد مكتبات Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // إعدادات Firebase: استبدلي XXXX بالقيم تبعك من Firebase Console
+  const firebaseConfig = {
+    apiKey: "XXXX",
+    authDomain: "XXXX.firebaseapp.com",
+    projectId: "XXXX",
+    storageBucket: "XXXX.appspot.com",
+    messagingSenderId: "XXXX",
+    appId: "XXXX"
+  };
+
+  // تهيئة التطبيق
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // دالة لحفظ نتيجة الطالب على Firebase
+  async function saveResult(userId, score) {
+    try {
+      await setDoc(doc(db, "results", userId), { score });
+      alert("✅ تم حفظ النتيجة بنجاح على الخادم!");
+    } catch (error) {
+      console.error("❌ خطأ بحفظ النتيجة:", error);
+      alert("❌ حدث خطأ أثناء حفظ النتيجة.");
+    }
+  }
+
+  // دالة لجلب نتيجة الطالب لاحقًا
+  async function getResult(userId) {
+    try {
+      const docSnap = await getDoc(doc(db, "results", userId));
+      if (docSnap.exists()) {
+        console.log("النتيجة:", docSnap.data());
+        return docSnap.data();
+      } else {
+        console.log("ما في بيانات لهالطالب.");
+        return null;
+      }
+    } catch (error) {
+      console.error("❌ خطأ بجلب النتيجة:", error);
+      return null;
+    }
+  }
+
+  // مثال: استدعاء الدالة (يمكن ربطها بزر لاحقًا)
+  // saveResult("testUser", 50);
+</script>
+
 </script>
 
 </script>
 </body>
 </html>
+
 
 
 
